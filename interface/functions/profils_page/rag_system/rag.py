@@ -14,13 +14,19 @@ from CONFIG import LANG, PROFILS_LLM, PROFILS_EMBEDDING_LLM, PROFILS_BASE_DIR, P
 
 
 class CustomProcessor:
-    def __init__(self, language=LANG, llm_model=PROFILS_LLM, embeddings_model=PROFILS_EMBEDDING_LLM, actual_profile=PROFILS_DEFAULT_PROFIL):
+    def __init__(self, language=LANG, llm_model=PROFILS_LLM, embeddings_model=PROFILS_EMBEDDING_LLM, base_dir=PROFILS_BASE_DIR, actual_profile=PROFILS_DEFAULT_PROFIL, 
+                 chunks=PROFILS_CHUNKS, overlap=PROFILS_OVERLAP, similarity=PROFILS_SIMILARITY, documents=PROFILS_DOCUMENTS):
         self.language = language
         self.llm_model = llm_model
         self.embeddings_model = embeddings_model
+        self.base_dir = base_dir
         self.actual_profile = actual_profile
+        self.chunks = chunks
+        self.overlap = overlap
+        self.similarity = similarity
+        self.documents = documents
 
-        self.db_dir = os.path.join(PROFILS_BASE_DIR, self.actual_profile)
+        self.db_dir = os.path.join(self.base_dir, self.actual_profile)
         os.makedirs(self.db_dir, exist_ok=True)
 
     def process_ressources(self, resources):
@@ -40,7 +46,7 @@ class CustomProcessor:
                 docs.extend(PyPDFLoader(temp_file_path).load())
                 os.unlink(temp_file_path)
 
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=PROFILS_CHUNKS, chunk_overlap=PROFILS_OVERLAP)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=self.chunks, chunk_overlap=self.overlap)
         doc_splits = text_splitter.split_documents(docs)
         return doc_splits
     
@@ -57,17 +63,17 @@ class CustomProcessor:
         if search_type == "similarity_score_threshold":
             retriever = retriever.vectorstore.as_retriever(
                 search_type="similarity_score_threshold",
-                search_kwargs={'score_threshold': PROFILS_SIMILARITY, 'k': PROFILS_DOCUMENTS}
+                search_kwargs={'score_threshold': self.similarity, 'k': self.documents}
             )
         elif search_type == "mmr":
             retriever = retriever.vectorstore.as_retriever(
                 search_type="mmr",
-                search_kwargs={'fetch_k': 20, 'lambda_mult': 0.5, 'k': PROFILS_DOCUMENTS}
+                search_kwargs={'fetch_k': 20, 'lambda_mult': 0.5, 'k': self.documents}
             )
         elif search_type == "similarity":
             retriever = retriever.vectorstore.as_retriever(
                 search_type="similarity",
-                search_kwargs={'k': PROFILS_DOCUMENTS}
+                search_kwargs={'k': self.documents}
             )
         else:
             raise ValueError(f"Unknown search_type: {search_type}")
