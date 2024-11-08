@@ -4,14 +4,15 @@ from functions.save_history import profil_save_history
 from CONFIG import LANG, PROFILS_SESSION_NAME, PROFILS_HISTORY
 
 
-def rag_text_files_load(urls, actual_profile, uploaded_files):
+def rag_text_files_load(actual_profile, urls, uploaded_files):
     rag = CustomProcessor(actual_profile=actual_profile)
     resources = urls + [file.getvalue() for file in uploaded_files]
     doc_splits = rag.process_ressources(resources)
     rag.process_vectorization(doc_splits)
     st.success("Vectorisation effectuée avec succès !" if LANG == 'fr' else "Vectorization done successfully !")
 
-def rag_text_prompt(question, actual_profile, search_type):
+
+def rag_text_prompt(actual_profile, question, search_type):
     rag = CustomProcessor(actual_profile=actual_profile)
 
     # Check if the profile has changed
@@ -39,4 +40,4 @@ def rag_text_prompt(question, actual_profile, search_type):
                 with st.expander("📄 Voir les documents récupérés" if LANG == 'fr' else "📄 View recovered documents"):
                     st.write(st.session_state[PROFILS_SESSION_NAME][i].get('documents', 'Aucun document récupéré' if LANG == 'fr' else "No documents retrieved"))
 
-            profil_save_history(PROFILS_HISTORY, actual_profile, PROFILS_SESSION_NAME)
+            profil_save_history(actual_profile, PROFILS_HISTORY, PROFILS_SESSION_NAME)

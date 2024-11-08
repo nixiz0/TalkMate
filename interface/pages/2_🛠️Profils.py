@@ -18,6 +18,7 @@ set_page_title("🛠️ Question")
 
 # ---[Configuration Initialization]---
 load_vectorize = None
+question = None
 
 if not os.path.exists(PROFILS_BASE_DIR):
     os.makedirs(PROFILS_BASE_DIR)
@@ -70,12 +71,10 @@ if config_mode:
 
 st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
 
-# Retrieve all folders (profils)
+# Retrieve all folders (profils) & Add default profil to list if doesn't already exist
 profiles = [name for name in os.listdir(PROFILS_BASE_DIR) if os.path.isdir(os.path.join(PROFILS_BASE_DIR, name)) 
             and name not in ['__pycache__', 'temp-file']]
 profiles.insert(0, '')
-
-# Add PROFILS_DEFAULT_PROFIL to the list of profiles if it doesn't already exist
 if PROFILS_DEFAULT_PROFIL not in profiles:
     profiles.insert(1, PROFILS_DEFAULT_PROFIL)
 
@@ -103,12 +102,12 @@ if not actual_profile == '':
     # Button to delete current profile
     if st.sidebar.button("Supprimer profil actuel" if LANG == 'fr' else "Delete actual profil"):
         try:
-            rag = CustomProcessor(language=LANG, llm_model=PROFILS_LLM, embeddings_model=PROFILS_EMBEDDING_LLM, actual_profile=actual_profile)
+            rag = CustomProcessor(actual_profile=actual_profile)
             rag.delete_profile()
             st.rerun()
         except Exception as e:
             st.error("Veuillez redémarrer l\'application pour supprimer correctement le profil." if LANG == 'fr' else 
-                        "Please restart the application to delete the profile correctly.")
+                     "Please restart the application to delete the profile correctly.")
         
     st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
         
@@ -138,6 +137,7 @@ if selected_file:
     rag_app_btn.download_as_csv()
     rag_app_btn.delete_file()
 
+
 # ---[Page Code]---
 if not selected_file:
     # Set messages in different languages
@@ -157,8 +157,6 @@ if not selected_file:
     # Use messages according to the chosen language
     lang_messages = messages.get(LANG, messages["en"])
 
-    question = None
-
     if load_vectorize == False:
         # Show UI elements with corresponding messages
         st.title(lang_messages["title"])
@@ -173,7 +171,7 @@ if not selected_file:
             if PROFILS_LLM and PROFILS_EMBEDDING_LLM:
                 if st.button("Vectoriser" if LANG == 'fr' else "Vectorize"):
                     # RAG Text add Documents
-                    rag_text_files_load(urls, actual_profile, uploaded_files)
+                    rag_text_files_load(actual_profile, urls, uploaded_files)
 
     elif load_vectorize == True: 
         question = st.chat_input("Entrez votre question ici :" if LANG == 'fr' else "Enter your question here :")
@@ -181,7 +179,7 @@ if not selected_file:
             st.sidebar.warning("Veuillez saisir une question" if LANG == "fr" else "Please enter a question")
         else: 
             # RAG Text
-            rag_text_prompt(question, actual_profile, PROFILS_SEARCH_TYPE)
+            rag_text_prompt(actual_profile, question, PROFILS_SEARCH_TYPE)
 
     else:
         st.warning("Veuillez choisir ou créer un profile" if LANG == 'fr' else "Please choose or create a profile")

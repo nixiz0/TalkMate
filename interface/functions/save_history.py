@@ -41,7 +41,7 @@ def assistant_save_history(session_state_updated, selected_file, history_dir, se
     return selected_file
 
 
-def profil_save_history(history_dir, actual_profile, session_name):
+def profil_save_history(actual_profile, history_dir, session_name):
     # Download stopwords if they are not already downloaded
     try:
         nltk.corpus.stopwords.words('english')
