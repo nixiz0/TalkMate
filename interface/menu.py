@@ -6,6 +6,8 @@ from io import BytesIO
 from CONFIG import LANG
 from configuration.choose_lang import get_lang
 from configuration.page_title import set_page_title
+from speech_to_text.micro import select_microphone
+from voice.voice_system import NarratorVoice
 
 
 # ---[Page Title]---
@@ -23,6 +25,14 @@ if lang_choice == 'French':
     get_lang('fr')
 elif lang_choice == 'English':
     get_lang('en')
+
+select_microphone(LANG)
+voice_index = NarratorVoice()
+voice_index.select_voice(LANG)
+
+# Instantiate voice_id and device_index sessions in the app
+voice_id = st.session_state['selected_voice_id']
+micro_index = st.session_state['selected_device_index']
 
 st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
 

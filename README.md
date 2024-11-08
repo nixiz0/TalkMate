@@ -1,4 +1,4 @@
-# TalkMate
+# TalkMate-Windows
 
 Interface allowing you to have a conversation with a LLM assistant and on your personnal data.
 Also, the app is very customizable, you can give specific instructions to your LLM and change rag system parameters.

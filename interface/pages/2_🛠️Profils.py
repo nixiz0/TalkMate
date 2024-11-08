@@ -11,6 +11,7 @@ from configuration.page_title import set_page_title
 from functions.app_button import AppButton
 from functions.profils_page.rag_system.rag import CustomProcessor
 from functions.profils_page.text_mode import rag_text_files_load, rag_text_prompt
+from functions.profils_page.discussion_mode import RAG_Discussion
 
 
 # ---[Page Title]---
@@ -180,6 +181,18 @@ if not selected_file:
         else: 
             # RAG Text
             rag_text_prompt(actual_profile, question, PROFILS_SEARCH_TYPE)
+        
+        try:
+            micro_device = st.session_state['selected_device_index']
+        except KeyError:
+            st.sidebar.warning("Veuillez aller dans le menu pour définir votre micro et la voix synthétique." if LANG == "fr" else
+                               "Please go to the menu to set your microphone and the synthetic voice.")
+            micro_device = None
+
+        if micro_device is not None:
+            # RAG Discussion
+            rag_discussion = RAG_Discussion(LANG, PROFILS_LLM, PROFILS_EMBEDDING_LLM, question, micro_device, actual_profile, PROFILS_HISTORY, PROFILS_SESSION_NAME)
+            rag_discussion.rag_discussion_prompt()
 
     else:
         st.warning("Veuillez choisir ou créer un profile" if LANG == 'fr' else "Please choose or create a profile")

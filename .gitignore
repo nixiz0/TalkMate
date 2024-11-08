@@ -5,3 +5,6 @@ __pycache__
 # User Conversation & Vector Profils
 conversation
 
+# Temp Audio
+temp_audio
+

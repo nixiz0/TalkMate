@@ -22,6 +22,11 @@ def start_ollama():
     else:
         subprocess.Popen(['gnome-terminal', '--', 'bash', '-c', 'ollama serve; exit'], shell=True)
 
+def install_scoop_and_ffmpeg():
+    subprocess.run(['powershell', '-Command', 'Set-ExecutionPolicy RemoteSigned -scope CurrentUser'], check=True)
+    subprocess.run(['powershell', '-Command', 'iwr -useb get.scoop.sh | iex'], check=True)
+    subprocess.run(['powershell', '-Command', 'scoop install ffmpeg'], check=True)
+
 def build_env():
     if not os.path.exists('.env'):
         subprocess.run(['python', '-m', 'venv', '.env'])
@@ -50,6 +55,7 @@ def start_and_install_lib():
         print(f"{CYAN}Required libraries are already installed.{RESET}")
     except subprocess.CalledProcessError:
         print(f"{CYAN}Installing required libraries...{RESET}")
+        subprocess.run([pip_executable, 'install', 'torch torchaudio --index-url https://download.pytorch.org/whl/cu118'])
         subprocess.run([pip_executable, 'install', '-r', 'requirements.txt'])
 
         # Ask user for installation mode after installing requirements
@@ -68,6 +74,7 @@ def start_and_install_lib():
 
 def auto_run():
     start_ollama()
+    install_scoop_and_ffmpeg
     build_env()
     start_and_install_lib()
 

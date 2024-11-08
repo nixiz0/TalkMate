@@ -6,6 +6,7 @@ from configuration.choose_llm import view_install_llms, get_llm
 from configuration.page_title import set_page_title
 from functions.assistant_page.build_custom_llm import custom_llm
 from functions.assistant_page.text_mode import text_prompt
+from functions.assistant_page.discussion_mode import discussion_prompt
 
 
 # ---[Page Title]---
@@ -40,6 +41,13 @@ if config_mode:
 
 st.sidebar.markdown("<hr style='margin:0px;'>", unsafe_allow_html=True)
 
+try:
+    micro_device = st.session_state['selected_device_index']
+except KeyError:
+    st.sidebar.warning("Veuillez aller dans le menu pour définir votre micro et la voix synthétique." if LANG == "fr" else
+                       "Please go to the menu to set your microphone and the synthetic voice.")
+    micro_device = None
+
 
 # ---[Page Code]---
 # Add a picker to choose a chat history file
@@ -50,6 +58,16 @@ selected_file = st.sidebar.selectbox("Historique de conversation" if LANG == 'fr
 prompt = st.chat_input("Posez une question" if LANG == 'fr' else "Ask a Question")
 
 text_prompt(prompt, LANG, ASSISTANT_LLM, session_state_updated, selected_file, ASSISTANT_HISTORY_DIR, ASSISTANT_SESSION_NAME)
+
+if micro_device is not None:
+    st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
+
+    # Change the parameter if the user want a continue discussion or not
+    st.session_state['continue_discussion'] = False
+    st.session_state['continue_discussion'] = st.sidebar.checkbox('Discussion continue' if LANG == 'fr' else 
+                                                                  'Continue Discussion', value=st.session_state['continue_discussion'])
+    
+    discussion_prompt(LANG, ASSISTANT_LLM, micro_device, session_state_updated, selected_file, ASSISTANT_HISTORY_DIR, ASSISTANT_SESSION_NAME)
 
 # Show all previous posts
 for message in st.session_state[ASSISTANT_SESSION_NAME]:

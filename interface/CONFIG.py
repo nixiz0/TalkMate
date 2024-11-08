@@ -17,3 +17,7 @@ PROFILS_FETCH_K = 20
 PROFILS_LAMBDA_MULT = 0.5
 PROFILS_SIMILARITY = 0.6
 PROFILS_DOCUMENTS = 4
+
+
+# [Speech to Text Config]
+AUDIO_TRANSCRIPTION_PATH = "interface/speech_to_text/temp_audio/audio.wav"
