@@ -23,61 +23,30 @@ def get_rag_config_values():
                 config_values['PROFILS_DOCUMENTS'] = int(line.split('=')[1].strip())
     return config_values
 
-def rag_search_type(search_type):
+def update_config(param_name, param_value):
     with open('interface/CONFIG.py', 'r') as file:
         config = file.readlines()
 
     with open('interface/CONFIG.py', 'w') as file:
         for line in config:
-            if line.startswith('PROFILS_SEARCH_TYPE'):
-                file.write(f'PROFILS_SEARCH_TYPE = "{search_type}"\n')
+            if line.startswith(param_name):
+                file.write(f'{param_name} = {param_value}\n')
             else:
                 file.write(line)
+
+def rag_search_type(search_type):
+    update_config('PROFILS_SEARCH_TYPE', f'"{search_type}"')
 
 def rag_chunks(chunk_size, chunk_overlap):
-    with open('interface/CONFIG.py', 'r') as file:
-        config = file.readlines()
-
-    with open('interface/CONFIG.py', 'w') as file:
-        for line in config:
-            if line.startswith('PROFILS_CHUNKS'):
-                file.write(f'PROFILS_CHUNKS = {chunk_size}\n')
-            elif line.startswith('PROFILS_OVERLAP'):
-                file.write(f'PROFILS_OVERLAP = {chunk_overlap}\n')
-            else:
-                file.write(line)
+    update_config('PROFILS_CHUNKS', chunk_size)
+    update_config('PROFILS_OVERLAP', chunk_overlap)
 
 def rag_fetch_k_lambda_mult(fetch_k, lambda_mult):
-    with open('interface/CONFIG.py', 'r') as file:
-        config = file.readlines()
-
-    with open('interface/CONFIG.py', 'w') as file:
-        for line in config:
-            if line.startswith('PROFILS_FETCH_K'):
-                file.write(f'PROFILS_FETCH_K = {fetch_k}\n')
-            elif line.startswith('PROFILS_LAMBDA_MULT'):
-                file.write(f'PROFILS_LAMBDA_MULT = {lambda_mult}\n')
-            else:
-                file.write(line)
+    update_config('PROFILS_FETCH_K', fetch_k)
+    update_config('PROFILS_LAMBDA_MULT', lambda_mult)
 
 def rag_similarity(similarity_threshold):
-    with open('interface/CONFIG.py', 'r') as file:
-        config = file.readlines()
-
-    with open('interface/CONFIG.py', 'w') as file:
-        for line in config:
-            if line.startswith('PROFILS_SIMILARITY'):
-                file.write(f'PROFILS_SIMILARITY = {similarity_threshold}\n')
-            else:
-                file.write(line)
+    update_config('PROFILS_SIMILARITY', similarity_threshold)
 
 def rag_documents(num_documents):
-    with open('interface/CONFIG.py', 'r') as file:
-        config = file.readlines()
-
-    with open('interface/CONFIG.py', 'w') as file:
-        for line in config:
-            if line.startswith('PROFILS_DOCUMENTS'):
-                file.write(f'PROFILS_DOCUMENTS = {num_documents}\n')
-            else:
-                file.write(line)
+    update_config('PROFILS_DOCUMENTS', num_documents)
