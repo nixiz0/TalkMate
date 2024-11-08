@@ -26,6 +26,7 @@ def install_scoop_and_ffmpeg():
     subprocess.run(['powershell', '-Command', 'Set-ExecutionPolicy RemoteSigned -scope CurrentUser'], check=True)
     subprocess.run(['powershell', '-Command', 'iwr -useb get.scoop.sh | iex'], check=True)
     subprocess.run(['powershell', '-Command', 'scoop install ffmpeg'], check=True)
+    print(f"{CYAN}Installing scoop and ffmpeg if they aren't already installed.{RESET}")
 
 def build_env():
     if not os.path.exists('.env'):
