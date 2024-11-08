@@ -53,11 +53,24 @@ class CustomProcessor:
         )
         return vectorstore.as_retriever()
 
-    def process_response(self, retriever, question):
-        # retriever = retriever.vectorstore.as_retriever(
-        #     search_type="similarity_score_threshold",
-        #     search_kwargs={'score_threshold': PROFILS_SIMILARITY, 'k': PROFILS_DOCUMENTS} 
-        # )
+    def process_response(self, retriever, question, search_type):
+        if search_type == "similarity_score_threshold":
+            retriever = retriever.vectorstore.as_retriever(
+                search_type="similarity_score_threshold",
+                search_kwargs={'score_threshold': PROFILS_SIMILARITY, 'k': PROFILS_DOCUMENTS}
+            )
+        elif search_type == "mmr":
+            retriever = retriever.vectorstore.as_retriever(
+                search_type="mmr",
+                search_kwargs={'fetch_k': 20, 'lambda_mult': 0.5, 'k': PROFILS_DOCUMENTS}
+            )
+        elif search_type == "similarity":
+            retriever = retriever.vectorstore.as_retriever(
+                search_type="similarity",
+                search_kwargs={'k': PROFILS_DOCUMENTS}
+            )
+        else:
+            raise ValueError(f"Unknown search_type: {search_type}")
 
         model_local = OllamaLLM(model=self.llm_model)
         after_rag_template = """Répond à la question en français en te basant uniquement sur le contexte suivant:
@@ -76,7 +89,7 @@ class CustomProcessor:
             | StrOutputParser()
         )
         
-        retrieved_docs = retriever.get_relevant_documents(question)
+        retrieved_docs = retriever.invoke(question)
         formatted_docs = "\n\n".join([f"Document {i+1}: {doc.page_content}" for i, doc in enumerate(retrieved_docs)])
         
         response = after_rag_chain.invoke(question)

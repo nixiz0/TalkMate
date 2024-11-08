@@ -4,15 +4,15 @@ from functions.save_history import profil_save_history
 from CONFIG import LANG, PROFILS_SESSION_NAME, PROFILS_HISTORY
 
 
-def rag_text_files_load(urls, uploaded_files):
-    rag = CustomProcessor()
+def rag_text_files_load(urls, actual_profile, uploaded_files):
+    rag = CustomProcessor(actual_profile=actual_profile)
     resources = urls + [file.getvalue() for file in uploaded_files]
     doc_splits = rag.process_ressources(resources)
     rag.process_vectorization(doc_splits)
     st.success("Vectorisation effectuée avec succès !" if LANG == 'fr' else "Vectorization done successfully !")
 
-def rag_text_prompt(question, actual_profile):
-    rag = CustomProcessor()
+def rag_text_prompt(question, actual_profile, search_type):
+    rag = CustomProcessor(actual_profile=actual_profile)
 
     # Check if the profile has changed
     if 'previous_profile' in st.session_state and st.session_state['previous_profile'] != actual_profile:
@@ -25,7 +25,7 @@ def rag_text_prompt(question, actual_profile):
     if question:
         with st.spinner('Traitement' if LANG == 'fr' else 'Processing...'):
             retriever = rag.load_vectorized_documents()
-            response, formatted_docs = rag.process_response(retriever, question)
+            response, formatted_docs = rag.process_response(retriever, question, search_type)
             
             # Add the question, response, and retrieved documents to the conversation
             st.session_state[PROFILS_SESSION_NAME].append({"user": question, "assistant": response, "documents": formatted_docs})

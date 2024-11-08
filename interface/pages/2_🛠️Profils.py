@@ -4,9 +4,9 @@ import os
 import unicodedata
 import re
 
-from CONFIG import LANG, PROFILS_LLM, PROFILS_EMBEDDING_LLM, PROFILS_SESSION_NAME, PROFILS_HISTORY, PROFILS_BASE_DIR, PROFILS_DEFAULT_PROFIL
+from CONFIG import *
 from configuration.choose_llm import view_install_llms, get_llm
-from configuration.rag_config import get_rag_config_values, rag_chunks, rag_similarity_and_documents
+from configuration.rag_config import get_rag_config_values, rag_search_type, rag_chunks, rag_fetch_k_lambda_mult, rag_similarity, rag_documents
 from configuration.page_title import set_page_title
 from functions.profils_page.rag_system.rag import CustomProcessor
 from functions.profils_page.app_button import RAGButton
@@ -47,13 +47,26 @@ if config_mode:
 
     config_values = get_rag_config_values()
 
+    search_types = ["similarity", "mmr", "similarity_score_threshold"]
+    search_type_index = search_types.index(PROFILS_SEARCH_TYPE) if PROFILS_SEARCH_TYPE in search_types else 0
+    search_type = st.sidebar.selectbox('🔍 Type de recherche' if LANG == "fr" else '🔍 Search Type', search_types, index=search_type_index)
+    rag_search_type(search_type)
+
     chunk_size = st.sidebar.number_input('Taille des Chunks' if LANG == 'fr' else "Chunks Size", 100, 10000, config_values['PROFILS_CHUNKS'], 100)
     chunk_overlap = st.sidebar.number_input('Chevauchement' if LANG == 'fr' else "Overlap", 20, 1000, config_values['PROFILS_OVERLAP'], 10)
     rag_chunks(chunk_size, chunk_overlap)
 
-    similarity_threshold = st.sidebar.slider('Seuil de similarité' if LANG == 'fr' else "Similarity Threshold", 0.1, 1.0, config_values['PROFILS_SIMILARITY'], 0.05)
+    if search_type == "similarity_score_threshold":
+        similarity_threshold = st.sidebar.slider('Seuil de similarité' if LANG == 'fr' else "Similarity Threshold", 0.1, 1.0, config_values['PROFILS_SIMILARITY'], 0.05)
+        rag_similarity(similarity_threshold)
+
+    if search_type == "mmr":
+        fetch_k = st.sidebar.number_input('Fetch k', 1, 100, config_values['PROFILS_FETCH_K'], 1)
+        lambda_mult = st.sidebar.slider('Lambda Mult', 0.0, 1.0, config_values['PROFILS_LAMBDA_MULT'], 0.1)
+        rag_fetch_k_lambda_mult(fetch_k, lambda_mult)
+
     num_documents = st.sidebar.slider('Nombre de documents' if LANG == 'fr' else "Number of documents", 1, 20, config_values['PROFILS_DOCUMENTS'], 1)
-    rag_similarity_and_documents(similarity_threshold, num_documents)
+    rag_documents(num_documents)
 
 st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
 
@@ -160,7 +173,7 @@ if not selected_file:
             if PROFILS_LLM and PROFILS_EMBEDDING_LLM:
                 if st.button("Vectoriser" if LANG == 'fr' else "Vectorize"):
                     # RAG Text add Documents
-                    rag_text_files_load(urls, uploaded_files)
+                    rag_text_files_load(urls, actual_profile, uploaded_files)
 
     elif load_vectorize == True: 
         question = st.chat_input("Entrez votre question ici :" if LANG == 'fr' else "Enter your question here :")
@@ -168,7 +181,7 @@ if not selected_file:
             st.sidebar.warning("Veuillez saisir une question" if LANG == "fr" else "Please enter a question")
         else: 
             # RAG Text
-            rag_text_prompt(question, actual_profile)
+            rag_text_prompt(question, actual_profile, PROFILS_SEARCH_TYPE)
 
     else:
         st.warning("Veuillez choisir ou créer un profile" if LANG == 'fr' else "Please choose or create a profile")
