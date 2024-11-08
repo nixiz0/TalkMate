@@ -1,0 +1,7 @@
+# Cache & Environment files
+__pycache__
+.env
+
+# User Conversation & Vector Profils
+conversation
+
