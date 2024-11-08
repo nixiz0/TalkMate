@@ -8,8 +8,8 @@ from CONFIG import *
 from configuration.choose_llm import view_install_llms, get_llm
 from configuration.rag_config import get_rag_config_values, rag_search_type, rag_chunks, rag_fetch_k_lambda_mult, rag_similarity, rag_documents
 from configuration.page_title import set_page_title
+from functions.app_button import AppButton
 from functions.profils_page.rag_system.rag import CustomProcessor
-from functions.profils_page.app_button import RAGButton
 from functions.profils_page.text_mode import rag_text_files_load, rag_text_prompt
 
 
@@ -133,10 +133,10 @@ if selected_file:
             st.write(f"❓User: {loaded_conversation[i]['user']}")
             st.write(f"🤖Assistant: {loaded_conversation[i]['assistant']}")
 
-    rag_app_btn = RAGButton(LANG, PROFILS_HISTORY, selected_file)
+    rag_app_btn = AppButton(LANG, PROFILS_HISTORY, selected_file)
     rag_app_btn.rename_file()
     rag_app_btn.download_as_csv()
-    rag_app_btn.delete_file(selected_file)
+    rag_app_btn.delete_file()
 
 # ---[Page Code]---
 if not selected_file:

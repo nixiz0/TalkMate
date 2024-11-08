@@ -1,13 +1,13 @@
 import os
-import string
+import json
+import pandas as pd
 import base64
 import streamlit as st
-import pandas as pd
-import json
+import string
 
 
 class AppButton:
-    def __init__(self, lang, history_dir, selected_file, session_name):
+    def __init__(self, lang, history_dir, selected_file, session_name=None):
         self.lang = lang
         self.history_dir = history_dir
         self.selected_file = selected_file
@@ -21,7 +21,8 @@ class AppButton:
                 if not new_file_name.endswith('.json'):
                     new_file_name += '.json'
                 os.rename(os.path.join(self.history_dir, self.selected_file), os.path.join(self.history_dir, new_file_name))
-                st.session_state[self.session_name] = []
+                if self.session_name:
+                    st.session_state[self.session_name] = []
                 st.rerun()
         else:
             st.sidebar.warning('Veuillez entrer un nom de fichier.' if self.lang == 'fr' else 'Please enter a file name.')
@@ -29,11 +30,12 @@ class AppButton:
     def delete_file(self):
         if st.sidebar.button('Supprimer' if self.lang == 'fr' else 'Delete'):
             os.remove(os.path.join(self.history_dir, self.selected_file))
-            st.session_state[self.session_name] = []
+            if self.session_name:
+                st.session_state[self.session_name] = []
             st.rerun()
 
     def new_file(self):
-        if st.sidebar.button('Nouveau' if self.lang == 'fr' else 'New'):
+        if self.session_name and st.sidebar.button('Nouveau' if self.lang == 'fr' else 'New'):
             st.session_state[self.session_name] = []
             st.rerun()
 
@@ -45,8 +47,5 @@ class AppButton:
                 csv = df.to_csv(index=False, encoding='utf-8')
                 b64 = base64.b64encode(csv.encode()).decode()
                 csv_file_name = self.selected_file.replace('.json', '.csv')
-                if self.lang == 'fr':
-                    href = f'<a href="data:file/csv;base64,{b64}" download="{csv_file_name}">Cliquez pour télécharger</a>'
-                else: 
-                    href = f'<a href="data:file/csv;base64,{b64}" download="{csv_file_name}">Click to download</a>'
+                href = f'<a href="data:file/csv;base64,{b64}" download="{csv_file_name}">{"Cliquez pour télécharger" if self.lang == "fr" else "Click to download"}</a>'
                 st.sidebar.markdown(href, unsafe_allow_html=True)
