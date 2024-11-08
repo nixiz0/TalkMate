@@ -55,7 +55,7 @@ def start_and_install_lib():
         print(f"{CYAN}Required libraries are already installed.{RESET}")
     except subprocess.CalledProcessError:
         print(f"{CYAN}Installing required libraries...{RESET}")
-        subprocess.run([pip_executable, 'install', 'torch torchaudio --index-url https://download.pytorch.org/whl/cu118'])
+        subprocess.run([pip_executable, 'install', 'torch', 'torchaudio', '--index-url', 'https://download.pytorch.org/whl/cu118'])
         subprocess.run([pip_executable, 'install', '-r', 'requirements.txt'])
 
         # Ask user for installation mode after installing requirements
