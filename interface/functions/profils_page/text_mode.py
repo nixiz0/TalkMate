@@ -12,12 +12,12 @@ def rag_text_files_load(actual_profile, urls, uploaded_files):
     st.success("Vectorisation effectuée avec succès !" if LANG == 'fr' else "Vectorization done successfully !")
 
 
-def rag_text_prompt(actual_profile, question, search_type):
+def rag_text_prompt(actual_profile, question, search_type, session_name=PROFILS_SESSION_NAME, history=PROFILS_HISTORY):
     rag = CustomProcessor(actual_profile=actual_profile)
 
     # Check if the profile has changed
     if 'previous_profile' in st.session_state and st.session_state['previous_profile'] != actual_profile:
-        st.session_state[PROFILS_SESSION_NAME] = []
+        st.session_state[session_name] = []
         
     # Update the previous profile
     st.session_state['previous_profile'] = actual_profile
@@ -29,15 +29,15 @@ def rag_text_prompt(actual_profile, question, search_type):
             response, formatted_docs = rag.process_response(retriever, question, search_type)
             
             # Add the question, response, and retrieved documents to the conversation
-            st.session_state[PROFILS_SESSION_NAME].append({"user": question, "assistant": response, "documents": formatted_docs})
+            st.session_state[session_name].append({"user": question, "assistant": response, "documents": formatted_docs})
 
             # Display the conversation with an expander for retrieved documents
-            for i in range(len(st.session_state[PROFILS_SESSION_NAME])):
-                st.write(f"❓User: {st.session_state[PROFILS_SESSION_NAME][i]['user']}")
-                st.write(f"🤖Assistant: {st.session_state[PROFILS_SESSION_NAME][i]['assistant']}")
+            for i in range(len(st.session_state[session_name])):
+                st.write(f"❓User: {st.session_state[session_name][i]['user']}")
+                st.write(f"🤖Assistant: {st.session_state[session_name][i]['assistant']}")
                 
                 # Use an expander to show retrieved documents only when clicked
                 with st.expander("📄 Voir les documents récupérés" if LANG == 'fr' else "📄 View recovered documents"):
-                    st.write(st.session_state[PROFILS_SESSION_NAME][i].get('documents', 'Aucun document récupéré' if LANG == 'fr' else "No documents retrieved"))
+                    st.write(st.session_state[session_name][i].get('documents', 'Aucun document récupéré' if LANG == 'fr' else "No documents retrieved"))
 
-            profil_save_history(actual_profile, PROFILS_HISTORY, PROFILS_SESSION_NAME)
+            profil_save_history(actual_profile, history, session_name)
