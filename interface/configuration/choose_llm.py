@@ -9,7 +9,7 @@ def view_install_llms():
         output = subprocess.check_output("ollama list", shell=True).decode()
 
         # Split the output into lines and ignore the first line
-        lines = output.split('\n')[2:]
+        lines = output.split('\n')[1:]
 
         # Retrieve only model names
         model_names = [line.split()[0] for line in lines if line]
