@@ -54,7 +54,7 @@ def start_and_install_lib():
 
         # Ask user for installation mode after installing requirements
         while True:
-            mode = input(f"{GREEN}Choose installation mode (1 for default, 2 for custom): {RESET}").strip()
+            mode = input(f"{GREEN}Choose LLMs installation mode (1 for default, 2 for custom (download yourself LLMs you want)): {RESET}").strip()
             if mode in ['1', '2']:
                 break
             print(f"{RED}Invalid input. Please enter 1 for default or 2 for custom.{RESET}")
