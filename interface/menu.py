@@ -64,18 +64,32 @@ with col2:
     else:
         st.markdown("<h2 style='text-align: center;'>in TalkMate</h2>", unsafe_allow_html=True)
 
-    # Text Presentation
+    # Talkmate Presentation
     if LANG == 'fr':
-        st.markdown("<p style='text-align: center;'> \
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
-                    Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. \
-                    Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. \
-                    </p>", 
-                    unsafe_allow_html=True)
+        st.markdown("""
+        <div style='text-align: center;'>
+            <h2>✨ L'application Talkmate ! ✨</h2>
+            <p>Talkmate est une application qui vous permet de :</p>
+            <ul style='list-style-type: none;'>
+                <li>💬 Parler à des LLMs en local</li>
+                <li>🎨 Personnaliser vos interactions</li>
+                <li>🔍 Accéder à vos données personnelles via un RAG</li>
+                <li>👥 Créer des profils personnalisés par RAG</li>
+            </ul>
+            <p>Profitez d'une expérience unique et enrichissante avec Talkmate !</p>
+        </div>
+        """, unsafe_allow_html=True)
     else:
-        st.markdown("<p style='text-align: center;'> \
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
-                    Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. \
-                    Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. \
-                    </p>", 
-                    unsafe_allow_html=True)
+        st.markdown("""
+        <div style='text-align: center;'>
+            <h2>✨ Talkmate Application ! ✨</h2>
+            <p>Talkmate is an application that allows you to:</p>
+            <ul style='list-style-type: none;'>
+                <li>💬 Chat with local LLMs</li>
+                <li>🎨 Customize your interactions</li>
+                <li>🔍 Access your personal data via RAG</li>
+                <li>👥 Create personalized profiles by RAG</li>
+            </ul>
+            <p>Enjoy a unique and enriching experience with Talkmate !</p>
+        </div>
+        """, unsafe_allow_html=True)

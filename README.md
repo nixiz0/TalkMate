@@ -6,16 +6,14 @@ Also, the app is very customizable, you can give specific instructions to your L
 
 ## Installation
 
-=> Click on **TalkMate-Installer.exe** to download the app along with other apps needed to work.
+=> Click on **TalkMate-Installer.exe** to download the app (and the apps needed for Talkmate to work).
 
 => Afterwards you click on **setup.exe** to build environment for the app.
 
 
 ## Tech Stack
 
-- **Python 3.11.7** (https://www.python.org/downloads/release/python-3117/)
-
-- **Ollama** (https://ollama.com/download)
+**[Application you have to install on your computer]**
 
 - **CUDA 11.8** (https://developer.nvidia.com/cuda-11-8-0-download-archive)
 
