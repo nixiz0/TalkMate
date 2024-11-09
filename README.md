@@ -6,12 +6,14 @@ Also, the app is very customizable, you can give specific instructions to your L
 
 ## Installation
 
-=> Click on **TalkMate-Installer.exe** to download the app along with other apps needed to work.
+=> Click on **TalkMate-Installer.exe** to download the app (be careful to install the necessary applications in Tech Stack).
 
 => Afterwards you click on **setup.exe** to build environment for the app.
 
 
 ## Tech Stack
+
+**[Application you have to install on your computer]**
 
 - **Python 3.11.7** (https://www.python.org/downloads/release/python-3117/)
 
