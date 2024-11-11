@@ -1,9 +1,12 @@
+# Language app config
 LANG = 'fr'
 
+# Config for Assistant page
 ASSISTANT_LLM = 'llama3.1:latest'
 ASSISTANT_SESSION_NAME = "assistant_state"
 ASSISTANT_HISTORY_DIR = "conversation/assistant_history"
 
+# Config for Profils page
 PROFILS_LLM = 'llama3.1:latest'
 PROFILS_EMBEDDING_LLM = 'nomic-embed-text:latest'
 PROFILS_SESSION_NAME = "profils_state"

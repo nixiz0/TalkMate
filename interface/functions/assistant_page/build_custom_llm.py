@@ -4,6 +4,12 @@ from configuration.modelfile_llm import show_modelfile_llm, rebuild_llm
 
 
 def custom_llm(model_use):
+    """
+    Configure and update the custom language model settings.
+    
+    Parameters:
+    model_use (str): The name of the model to use.
+    """
     modelfile_values = {
         'system_text': "",
         'modelfile': "",

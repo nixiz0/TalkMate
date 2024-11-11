@@ -29,6 +29,7 @@ if PROFILS_SESSION_NAME not in st.session_state:
 
 
 # ---[Sidebar Code]---
+# Checkbox to view all config
 config_mode = st.sidebar.checkbox("⚙️Configuration")
 if config_mode:
     model_names = view_install_llms()
@@ -164,6 +165,7 @@ if not selected_file:
         urls = st.text_area(lang_messages["url_text"])
         urls = urls.split("\n")
 
+        # Upload PDF
         uploaded_files = st.file_uploader(lang_messages["file_uploader_text"], type=["pdf"], accept_multiple_files=True)
         if not uploaded_files and not urls[0]:
             st.warning("Veuillez rentrer au moins une ressource à traiter" if LANG == 'fr' else 
@@ -171,7 +173,7 @@ if not selected_file:
         else:
             if PROFILS_LLM and PROFILS_EMBEDDING_LLM:
                 if st.button("Vectoriser" if LANG == 'fr' else "Vectorize"):
-                    # RAG Text add Documents
+                    # RAG Text add Documents (vectorize)
                     rag_text_files_load(actual_profile, urls, uploaded_files)
 
     elif load_vectorize == True: 

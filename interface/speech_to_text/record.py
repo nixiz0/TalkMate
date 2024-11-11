@@ -6,6 +6,20 @@ import collections
 
 
 def record_audio(filename="./speech_to_text/temp_audio/audio.wav", device_index=0, rate=44100, chunk=1024, threshold=500, pre_recording_buffer_length=2):
+    """
+    Record audio from the microphone and save it to a file.
+
+    Parameters:
+    filename (str): The path to save the recorded audio file.
+    device_index (int): The index of the audio input device.
+    rate (int): The sample rate for recording.
+    chunk (int): The number of frames per buffer.
+    threshold (int): The RMS threshold for detecting sound.
+    pre_recording_buffer_length (int): The length of the pre-recording buffer in seconds.
+
+    Returns:
+    bool: True if audio was recorded and saved, False otherwise.
+    """
     if not os.path.exists(os.path.dirname(filename)):
         os.makedirs(os.path.dirname(filename))
 

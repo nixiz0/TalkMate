@@ -10,6 +10,21 @@ from voice.voice_system import NarratorVoice
 
 
 def process_discussion(lang, model_use, micro_index, session_state_updated, selected_file, history_dir, session_name):
+    """
+    Process a discussion by recording audio, transcribing it, and generating a response using a language model.
+
+    Parameters:
+    lang (str): The language for the UI elements.
+    model_use (str): The language model to use.
+    micro_index (int): The index of the microphone to use.
+    session_state_updated (list): The updated session state containing chat history.
+    selected_file (str): The currently selected file name.
+    history_dir (str): The directory where history files are stored.
+    session_name (str): The name of the session state variable to update.
+
+    Returns:
+    list: The updated session state containing chat history.
+    """
     if lang == "fr":
         st.sidebar.info("Écoute..")
     else: 
@@ -70,6 +85,22 @@ def process_discussion(lang, model_use, micro_index, session_state_updated, sele
 
 
 def discussion_prompt(lang, model_use, micro_index, session_state_updated, selected_file, history_dir, session_name):  
+    """
+    Handle the discussion prompt, manage session state, and process the discussion.
+
+    Parameters:
+    lang (str): The language for the UI elements.
+    model_use (str): The language model to use.
+    micro_index (int): The index of the microphone to use.
+    session_state_updated (list): The updated session state containing chat history.
+    selected_file (str): The currently selected file name.
+    history_dir (str): The directory where history files are stored.
+    session_name (str): The name of the session state variable to update.
+
+    Returns:
+    list: The updated session state containing chat history.
+    """
+    
     # Recover json load file if the user select and load a json
     if selected_file:
         with open(os.path.join(history_dir, selected_file), "r", encoding="utf8") as f:

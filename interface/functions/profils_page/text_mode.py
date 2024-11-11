@@ -5,6 +5,14 @@ from CONFIG import LANG, PROFILS_SESSION_NAME, PROFILS_HISTORY
 
 
 def rag_text_files_load(actual_profile, urls, uploaded_files):
+    """
+    Load and process (vectorize) text files for RAG (Retrieval-Augmented Generation).
+
+    Parameters:
+    actual_profile (str): The profile name of the user.
+    urls (list): A list of URLs to be processed.
+    uploaded_files (list): A list of files uploaded by the user.
+    """
     rag = CustomProcessor(actual_profile=actual_profile)
     resources = urls + [file.getvalue() for file in uploaded_files]
     doc_splits = rag.process_ressources(resources)
@@ -13,6 +21,16 @@ def rag_text_files_load(actual_profile, urls, uploaded_files):
 
 
 def rag_text_prompt(actual_profile, question, search_type, session_name=PROFILS_SESSION_NAME, history=PROFILS_HISTORY):
+    """
+    Process a user's question using RAG and update the session state with the response.
+    
+    Parameters:
+    actual_profile (str): The profile name of the user.
+    question (str): The user's question.
+    search_type (str): The type of search to perform.
+    session_name (str, optional): The name of the session state variable to update.
+    history (str, optional): The directory where history files are stored.
+    """
     rag = CustomProcessor(actual_profile=actual_profile)
 
     # Check if the profile has changed

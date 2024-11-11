@@ -1,4 +1,10 @@
 def get_lang(lang_choice):
+    """
+    Update the language setting in the configuration file.
+    
+    Parameters:
+    lang_choice (str): The chosen language to set.
+    """
     with open('interface/CONFIG.py', 'r') as file:
         lines = file.readlines()
     

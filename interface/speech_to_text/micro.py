@@ -3,6 +3,12 @@ import pyaudio
 
 
 def get_microphone_list():
+    """
+    Retrieve a list of available microphones.
+
+    Returns:
+    dict: A dictionary of available microphones with their indices as keys.
+    """
     try:
         p = pyaudio.PyAudio()
         info = p.get_host_api_info_by_index(0)
@@ -19,6 +25,15 @@ def get_microphone_list():
         return {}
 
 def select_microphone(language):
+    """
+    Select a microphone based on the user's language preference.
+
+    Parameters:
+    language (str): The language preference for the microphone selection.
+
+    Returns:
+    int: The index of the selected microphone.
+    """
     devices = get_microphone_list()
     device_names = [devices[i] for i in devices]
 

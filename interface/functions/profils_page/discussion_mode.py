@@ -8,7 +8,23 @@ from voice.voice_system import NarratorVoice
 
 
 class RAG_Discussion():
+    """
+    A class to handle Retrieval-Augmented Generation (RAG) discussions.
+    """
     def __init__(self, lang, llm_model, embeddings_model, question, micro_index, actual_profile, history_dir, session_name):
+        """
+        Initialize the RAG_Discussion class with the given parameters.
+
+        Parameters:
+        lang (str): The language for the UI elements.
+        llm_model (str): The llm to use.
+        embeddings_model (str): The embeddings model to use.
+        question (str): The user's question.
+        micro_index (int): The index of the microphone to use.
+        actual_profile (str): The current user profile.
+        history_dir (str): The directory where history files are stored.
+        session_name (str): The name of the session state variable to update.
+        """
         self.lang = lang
         self.llm_model = llm_model
         self.embeddings_model = embeddings_model
@@ -19,6 +35,9 @@ class RAG_Discussion():
         self.session_name = session_name
 
     def rag_discussion_prompt(self):
+        """
+        Handle the RAG discussion prompt, manage session state, and process the discussion.
+        """
         rag = CustomProcessor(language=self.lang, llm_model=self.llm_model, embeddings_model=self.embeddings_model, actual_profile=self.actual_profile)
 
         # Check if the profile has changed

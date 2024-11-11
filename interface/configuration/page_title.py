@@ -3,6 +3,12 @@ from PIL import Image
 
 
 def set_page_title(title):
+    """
+    Set the page title and favicon for the Streamlit application.
+    
+    Parameters:
+    title (str): The title to set for the page.
+    """
     favicon = Image.open('./interface/ressources/icon.png')
     st.set_page_config(
         page_title=title,

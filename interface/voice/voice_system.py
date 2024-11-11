@@ -4,6 +4,16 @@ import re
 
 
 def split_text_and_code(text):
+    """
+    Split the input text into segments of text and code.
+
+    Parameters:
+    text (str): The input text containing both text and code segments.
+
+    Returns:
+    list: A list of text and code segments.
+    """
+
     # Define a regex pattern for code detection
     pattern = r'(```.*?```)'  # This pattern matches text within triple backticks
     
@@ -13,16 +23,40 @@ def split_text_and_code(text):
     return segments
 
 class NarratorVoice:
+    """
+    A class to handle text-to-speech functionality.
+
+    Attributes:
+    engine (pyttsx3.Engine): The text-to-speech engine.
+    """
+
     def __init__(self):
-        # Initialize the text-to-speech engine
+        """
+        Initialize the text-to-speech engine.
+        """
         self.engine = pyttsx3.init()
 
     def get_voice_list(self):
+        """
+        Retrieve the list of available voices.
+
+        Returns:
+        dict: A dictionary of available voices with their indices as keys.
+        """
         voices = self.engine.getProperty('voices')
         voice_dict = {i: voice for i, voice in enumerate(voices)}
         return voice_dict
 
     def select_voice(self, language):
+        """
+        Select a synthetic voice based on the user's language preference.
+
+        Parameters:
+        language (str): The language preference for the voice selection.
+
+        Returns:
+        str: The ID of the selected voice.
+        """
         voices = self.get_voice_list()
         voice_names = [voices[i].name for i in voices]
 
@@ -38,6 +72,12 @@ class NarratorVoice:
         return st.session_state['selected_voice_id'] 
         
     def speak(self, text):
+        """
+        Convert the input text to speech, skipping code segments.
+
+        Parameters:
+        text (str): The input text to be converted to speech.
+        """
         # Split the text into text and code segments
         segments = split_text_and_code(text)
         

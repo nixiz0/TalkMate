@@ -7,6 +7,21 @@ from functions.app_button import AppButton
 
 
 def text_prompt(prompt, lang, model_use, session_state_updated, selected_file, history_dir, session_name):
+    """
+    Handle the text prompt input, process it with the language model, and manage session state.
+    
+    Parameters:
+    prompt (str): The user's input prompt.
+    lang (str): The language for the UI elements.
+    model_use (str): The llm model to use.
+    session_state_updated (list): The updated session state containing chat history.
+    selected_file (str): The currently selected file name.
+    history_dir (str): The directory where history files are stored.
+    session_name (str): The name of the session state variable to update.
+
+    Returns:
+    list: The updated session state containing chat history.
+    """
     app_btn = AppButton(lang, history_dir, selected_file, session_name)
     
     # Recover json load file if the user select and load a json
