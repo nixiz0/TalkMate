@@ -1,4 +1,10 @@
 def get_rag_config_values():
+    """
+    Retrieve RAG (Retrieval-Augmented Generation) configuration values.
+
+    Returns:
+    dict: A dictionary containing the RAG configuration values.
+    """
     config_values = {
         'PROFILS_CHUNKS': 3500,
         'PROFILS_OVERLAP': 100,
@@ -24,6 +30,13 @@ def get_rag_config_values():
     return config_values
 
 def update_config(param_name, param_value):
+    """
+    Update a specific parameter in the configuration file.
+
+    Parameters:
+    param_name (str): The name of the parameter to update.
+    param_value (str/int/float): The new value for the parameter.
+    """
     with open('interface/CONFIG.py', 'r') as file:
         config = file.readlines()
 

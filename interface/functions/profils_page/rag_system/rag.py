@@ -14,8 +14,26 @@ from CONFIG import LANG, PROFILS_LLM, PROFILS_EMBEDDING_LLM, PROFILS_BASE_DIR, P
 
 
 class CustomProcessor:
+    """
+    CustomProcessor class to process and manage resources for Retrieval-Augmented Generation (RAG).
+    """
+
     def __init__(self, language=LANG, llm_model=PROFILS_LLM, embeddings_model=PROFILS_EMBEDDING_LLM, base_dir=PROFILS_BASE_DIR, actual_profile=PROFILS_DEFAULT_PROFIL, 
                  chunks=PROFILS_CHUNKS, overlap=PROFILS_OVERLAP, similarity=PROFILS_SIMILARITY, documents=PROFILS_DOCUMENTS):
+        """
+        Initialize the CustomProcessor with the given parameters.
+
+        Parameters:
+        language (str): The language for processing.
+        llm_model (str): The language model to use.
+        embeddings_model (str): The embeddings model to use.
+        base_dir (str): The base directory for storing data.
+        actual_profile (str): The current user profile.
+        chunks (int): The chunk size for text splitting.
+        overlap (int): The overlap size for text splitting.
+        similarity (float): The similarity threshold for document retrieval.
+        documents (int): The number of documents to retrieve.
+        """
         self.language = language
         self.llm_model = llm_model
         self.embeddings_model = embeddings_model
@@ -30,6 +48,15 @@ class CustomProcessor:
         os.makedirs(self.db_dir, exist_ok=True)
 
     def process_ressources(self, resources):
+        """
+        Process the given resources and split them into chunks.
+
+        Parameters:
+        resources (list): A list of resources (URLs or file contents) to process.
+
+        Returns:
+        list: A list of document splits.
+        """
         docs = []
         for resource in resources:
             if isinstance(resource, str):
@@ -51,6 +78,15 @@ class CustomProcessor:
         return doc_splits
     
     def process_vectorization(self, doc_splits):
+        """
+        Vectorize the document splits and return a retriever.
+
+        Parameters:
+        doc_splits (list): A list of document splits to vectorize.
+
+        Returns:
+        retriever: A retriever for the vectorized documents.
+        """
         vectorstore = Chroma.from_documents(
             documents=doc_splits,
             collection_name=self.actual_profile,
@@ -60,6 +96,17 @@ class CustomProcessor:
         return vectorstore.as_retriever()
 
     def process_response(self, retriever, question, search_type):
+        """
+        Process the user's question and retrieve relevant documents.
+
+        Parameters:
+        retriever (retriever): The retriever for vectorized documents.
+        question (str): The user's question.
+        search_type (str): The type of rag search to perform.
+
+        Returns:
+        tuple: A tuple containing the response and formatted documents.
+        """
         if search_type == "similarity_score_threshold":
             retriever = retriever.vectorstore.as_retriever(
                 search_type="similarity_score_threshold",
@@ -103,6 +150,12 @@ class CustomProcessor:
         return response, formatted_docs
         
     def load_vectorized_documents(self):        
+        """
+        Load vectorized documents and return a retriever.
+
+        Returns:
+        retriever: A retriever for the vectorized documents.
+        """
         vectorstore = Chroma(
             collection_name=self.actual_profile,
             embedding_function=OllamaEmbeddings(model=self.embeddings_model),
@@ -111,5 +164,8 @@ class CustomProcessor:
         return vectorstore.as_retriever()
     
     def delete_profile(self):
+        """
+        Delete the profile directory and its contents.
+        """
         if os.path.exists(self.db_dir):
             shutil.rmtree(self.db_dir)

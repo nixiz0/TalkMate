@@ -4,6 +4,12 @@ from CONFIG import LANG
 
 
 def view_install_llms():
+    """
+    Retrieve and display the list of ollama installed llm.
+
+    Returns:
+    list: A list of installed language model names.
+    """
     try:
         # Run 'ollama list' command and get the output
         output = subprocess.check_output("ollama list", shell=True).decode()
@@ -26,6 +32,13 @@ def view_install_llms():
 
 
 def get_llm(LLM_OF_PAGE, model_name):
+    """
+    Set the specified language model in the configuration file.
+
+    Parameters:
+    LLM_OF_PAGE (str): The configuration variable for the language model.
+    model_name (str): The name of the model to set.
+    """
     try:
         with open('interface/CONFIG.py', 'r') as file:
             lines = file.readlines()

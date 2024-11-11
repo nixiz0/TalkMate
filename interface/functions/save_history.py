@@ -8,6 +8,19 @@ from nltk.corpus import stopwords
 
 
 def assistant_save_history(session_state_updated, selected_file, history_dir, session_name):
+    """
+    Save the chat history to a json file and update the session state.
+
+    Parameters:
+    session_state_updated (list): The updated session state containing chat history.
+    selected_file (str): The currently selected file name.
+    history_dir (str): The directory where history files are stored.
+    session_name (str): The name of the session state variable to update.
+
+    Returns:
+    selected_file: The name of the file where the chat history was saved.
+    """
+
     # Check if stopwords for English and French are already downloaded
     try:
         nltk.corpus.stopwords.words('english')
@@ -42,6 +55,15 @@ def assistant_save_history(session_state_updated, selected_file, history_dir, se
 
 
 def profil_save_history(actual_profile, history_dir, session_name):
+    """
+    Save the conversation history to a json file and update the session state.
+
+    Parameters:
+    actual_profile (str): The profile name of the user.
+    history_dir (str): The directory where history files are stored.
+    session_name (str): The name of the session state variable to update.
+    """
+
     # Download stopwords if they are not already downloaded
     try:
         nltk.corpus.stopwords.words('english')

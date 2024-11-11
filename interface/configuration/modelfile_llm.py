@@ -5,6 +5,15 @@ import os
 
 
 def show_modelfile_llm(model_use):
+    """
+    Display the model file content for the specified llm.
+
+    Parameters:
+    model_use (str): The name of the model to display.
+
+    Returns:
+    tuple: A tuple containing the system text, model file content, temperature, top_k, and top_p values.
+    """
     result = subprocess.run(["ollama", "show", model_use, "--modelfile"], capture_output=True, text=True, encoding='utf-8')
     output = result.stdout
 
@@ -51,6 +60,14 @@ def show_modelfile_llm(model_use):
     return system_text, modelfile, temperature, top_k, top_p
 
 def rebuild_llm(model_use, modified_system_text, modelfile):
+    """
+    Rebuild the llm with the modified system text and model file content.
+
+    Parameters:
+    model_use (str): The name of the model to rebuild.
+    modified_system_text (str): The modified system instruct to include.
+    modelfile (str): The original model file content.
+    """
     # Remove LICENSE section if it exists
     new_modelfile = ""
     in_license_section = False
